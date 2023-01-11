@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: increment_vault_date
+    description: "This only exists to run the post-hook that is a helper function to increase a date for simulating incremental loading."
+    columns:
+      - name: id
+        description: ""
