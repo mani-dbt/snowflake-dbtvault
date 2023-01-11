@@ -1,0 +1,24 @@
+version: 2
+
+models: 
+
+  - name: sat_order_customer_details
+    description: satellite table of customer details
+    columns:
+      - name: customer_pk
+        description: primary key of the model
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        description: customer name
+      - name: customer_address
+        description: customer address
+      - name: customer_phone
+        description: customer phone number
+      - name: customer_accbal
+        description: customer account balance
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
