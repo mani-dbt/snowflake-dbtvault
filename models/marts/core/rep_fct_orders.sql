@@ -18,14 +18,14 @@ final as (
         order_item.orderdate,
         order_item.orderstatus,
         order_item.orderpriority,
-        order_item.clerk_name,
+        order_item.clerk,
         order_item.shippriority,
         order_item.discount,
         order_item.extendedprice,
         order_item.quantity,     
         1 as order_count
     from
-        orders
+        order_item
 )
 select 
     *
@@ -33,4 +33,4 @@ from
     final
 
 order by
-    order_date
+    orderdate
