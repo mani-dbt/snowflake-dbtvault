@@ -63,3 +63,27 @@ exposures:
       email: dbtuserbob@getdbt.com
     depends_on:
         - ref('agg_ship_modes_dynamic_pivot')
+
+  - name: orders_dashboard
+    description: |
+      # Orders Dashboard
+      ============
+      Dashboard with Order details & Analysis.
+    
+    # type could be {dashboard, notebook, analysis, ml, application}
+    type: dashboard 
+    
+    # this is just a link to the thing itself for click through from documentation
+    url: https://fishtown.looker.com/dashboards/625
+    
+    # convenience feature - relative scale of {high, medium, low}
+    maturity: high
+    
+    # documentation purposes for point of contact if stuff breaks
+    owner:
+      name: DBT User Bob
+      email: dbtuserbob@getdbt.com
+    
+    # IMPORTANT: determines the lineage relationship of the exposure construct to the rest of your DAG
+    depends_on:
+      - ref('rep_fct_orders')
