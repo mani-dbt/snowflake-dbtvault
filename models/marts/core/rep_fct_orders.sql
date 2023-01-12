@@ -18,7 +18,10 @@ final as (
         order_item.orderdate,
         order_item.orderstatus,
         order_item.orderpriority,
+        
         order_item.clerk,
+        -- 
+        order_item.totalprice,
         order_item.shippriority,
         order_item.discount,
         order_item.extendedprice,
