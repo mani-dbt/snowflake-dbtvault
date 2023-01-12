@@ -19,7 +19,7 @@ final as (
         order_item.orderstatus,
         order_item.orderpriority,
         
-        order_item.clerk,
+        -- order_item.clerk,
         -- 
         order_item.totalprice,
         order_item.shippriority,
