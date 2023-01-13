@@ -55,6 +55,7 @@ models:
     marts:
       core:
         materialized: table
+
     dbtvault:
       tags: 'dbtvaultdemo'
       util:
@@ -63,7 +64,7 @@ models:
       raw_stage:
         tags: 
           - 'raw'
-        materialized: view
+        materialized: table
       stage:
         tags:
           - 'stage'
@@ -76,12 +77,18 @@ models:
         hubs:
           tags:
             - 'hub'
+          +docs:
+            node_color: "#cd7f32"
         links:
           tags:
             - 'link'
+          +docs:
+            node_color: "#74ABE1"
         sats:
           tags:
             - 'satellite'
+          +docs:
+            node_color: "#0C8F85"
         t_links:
           tags:
             - 't_link'

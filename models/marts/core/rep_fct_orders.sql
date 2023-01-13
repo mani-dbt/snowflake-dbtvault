@@ -23,6 +23,7 @@ final as (
         -- 
         order_item.totalprice,
         order_item.shippriority,
+        order_item.shipdate,
         order_item.discount,
         order_item.extendedprice,
         order_item.quantity,     
