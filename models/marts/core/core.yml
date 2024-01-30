@@ -27,7 +27,19 @@ models:
         description: '{{ doc("account_balance") }}'
       - name: market_segment
         description: market segment of the customer
-
+        assertions:
+          customer_id_not_null:
+            description: 'customer Key column is not null'
+            expression: customer_key IS NOT NULL
+          market_segment_check:
+            description: 'checking market segment values'
+            expression: |
+              market_segment IN (
+                'AUTOMOBILE',
+                'FURNITURE',
+                'MACHINERY',
+                'HOUSEHOLD'
+              )
 
   - name: dim_parts
     description: Parts dimensions table

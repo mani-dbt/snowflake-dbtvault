@@ -39,7 +39,8 @@ final as (
             on nation.region_key = region.region_key
 )
 select 
-    *
+    *,
+    {{ dbt_assertions.assertions() }}
 from
     final
 order by
