@@ -38,6 +38,7 @@ final as (
         inner join region
             on nation.region_key = region.region_key
 )
+
 select 
     *,
     {{ dbt_assertions.assertions() }}
