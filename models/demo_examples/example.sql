@@ -1,7 +1,7 @@
 {{
     config(
         materialized='table',
-        post_hook='update abc where id = 5'
+        post_hook='update abc set desc=asdf where id = 5'
     )
 }}
 
