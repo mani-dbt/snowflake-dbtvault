@@ -5,7 +5,7 @@ sources:
     tags: 
       - 'dbtvaultdemo'
     database: raw
-    schema: TPCH_SF{{ var('tpch_size', 10) }}
+    schema: TPCH_SF001
     tables:
       - name: LINEITEM
       - name: CUSTOMER
