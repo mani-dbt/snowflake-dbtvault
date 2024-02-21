@@ -1,9 +1,10 @@
-{% macro get_tables_in_schema(schema_name, database_name=target.database) %}
-
+{% macro get_tables_in_schema(schema_name, database_name=target.database, table_pattern='%', exclude='') %}
+    
     {% set tables=dbt_utils.get_relations_by_pattern(
-            database=database_name,
-            schema_pattern=schema_name,
-            table_pattern='%'
+        schema_pattern=schema_name,
+        database=database_name,
+        table_pattern=table_pattern,
+        exclude=exclude
     ) %}
 
     {% set table_list= tables | map(attribute='identifier') %}
@@ -12,28 +13,43 @@
 
 {% endmacro %}
 
+{% macro generate_source(schema_name, database_name=target.database, generate_columns=False, include_descriptions=False, include_data_types=True, table_pattern='%', exclude='', name=schema_name, table_names=None, include_database=False, include_schema=False) %}
+    {{ return(adapter.dispatch('generate_source', 'codegen')(schema_name, database_name, generate_columns, include_descriptions, include_data_types, table_pattern, exclude, name, table_names, include_database, include_schema)) }}
+{% endmacro %}
 
----
-{% macro generate_source(schema_name, database_name=target.database, generate_columns=False, include_descriptions=False) %}
+{% macro default__generate_source(schema_name, database_name, generate_columns, include_descriptions, include_data_types, table_pattern, exclude, name, table_names, include_database, include_schema) %}
 
 {% set sources_yaml=[] %}
-
 {% do sources_yaml.append('version: 2') %}
 {% do sources_yaml.append('') %}
 {% do sources_yaml.append('sources:') %}
-{% do sources_yaml.append('  - name: ' ~ schema_name | lower) %}
+{% do sources_yaml.append('  - name: ' ~ name | lower) %}
 
-{% if database_name != target.database %}
+{% if include_descriptions %}
+    {% do sources_yaml.append('    description: ""' ) %}
+{% endif %}
+
+{% if database_name != target.database or include_database %}
 {% do sources_yaml.append('    database: ' ~ database_name | lower) %}
+{% endif %}
+
+{% if schema_name != name or include_schema %}
+{% do sources_yaml.append('    schema: ' ~ schema_name | lower) %}
 {% endif %}
 
 {% do sources_yaml.append('    tables:') %}
 
-{% set tables=codegen.get_tables_in_schema(schema_name, database_name) %}
+{% if table_names is none %}
+{% set tables=codegen.get_tables_in_schema(schema_name, database_name, table_pattern, exclude) %}
+{% else %}
+{% set tables = table_names %}
+{% endif %}
 
 {% for table in tables %}
     {% do sources_yaml.append('      - name: ' ~ table | lower ) %}
-
+    {% if include_descriptions %}
+        {% do sources_yaml.append('        description: ""' ) %}
+    {% endif %}
     {% if generate_columns %}
     {% do sources_yaml.append('        columns:') %}
 
@@ -47,6 +63,9 @@
 
         {% for column in columns %}
             {% do sources_yaml.append('          - name: ' ~ column.name | lower ) %}
+            {% if include_data_types %}
+                {% do sources_yaml.append('            data_type: ' ~ codegen.data_type_format_source(column)) %}
+            {% endif %}
             {% if include_descriptions %}
                 {% do sources_yaml.append('            description: ""' ) %}
             {% endif %}
@@ -60,7 +79,7 @@
 {% if execute %}
 
     {% set joined = sources_yaml | join ('\n') %}
-    {{ log(joined, info=True) }}
+    {{ print(joined) }}
     {% do return(joined) %}
 
 {% endif %}

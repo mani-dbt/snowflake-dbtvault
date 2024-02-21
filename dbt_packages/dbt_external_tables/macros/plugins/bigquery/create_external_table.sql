@@ -4,6 +4,10 @@
     {%- set external = source_node.external -%}
     {%- set partitions = external.partitions -%}
     {%- set options = external.options -%}
+
+    {% if options is mapping and options.get('connection_name', none) %}
+        {% set connection_name = options.pop('connection_name') %}
+    {% endif %}
     
     {%- set uris = [] -%}
     {%- if options is mapping and options.get('uris', none) -%}
@@ -15,7 +19,8 @@
     create or replace external table {{source(source_node.source_name, source_node.name)}}
         {%- if columns -%}(
             {% for column in columns %}
-                {{column.name}} {{column.data_type}} {{- ',' if not loop.last -}}
+                {%- set column_quoted = adapter.quote(column.name) if column.quote else column.name %}
+                {{column_quoted}} {{column.data_type}} {{- ',' if not loop.last -}}
             {%- endfor -%}
         )
         {% endif %}
@@ -25,6 +30,9 @@
                 {{partition.name}} {{partition.data_type}}{{',' if not loop.last}}
             {%- endfor -%}
         ) {% endif -%}
+        {% endif %}
+        {% if connection_name %}
+            with connection `{{ connection_name }}`
         {% endif %}
         options (
             uris = [{%- for uri in uris -%} '{{uri}}' {{- "," if not loop.last}} {%- endfor -%}]

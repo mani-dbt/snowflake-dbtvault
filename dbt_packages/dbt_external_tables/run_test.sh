@@ -1,5 +1,6 @@
 #!/bin/bash
-echo "Setting up virtual environment"
+
+echo "Setting up virtual environment for dbt-$1"
 VENV="venv/bin/activate"
 
 if [[ ! -f $VENV ]]; then
@@ -31,9 +32,10 @@ if [[ ! -e ~/.dbt/profiles.yml ]]; then
 fi
 
 echo "Starting integration tests"
+set -eo pipefail
 dbt deps --target $1
 dbt seed --full-refresh --target $1
 dbt run-operation prep_external --target $1
-dbt run-operation stage_external_sources --var 'ext_full_refresh: true' --target $1
-dbt run-operation stage_external_sources --target $1
+dbt run-operation dbt_external_tables.stage_external_sources --vars 'ext_full_refresh: true' --target $1
+dbt run-operation dbt_external_tables.stage_external_sources --target $1
 dbt test --target $1

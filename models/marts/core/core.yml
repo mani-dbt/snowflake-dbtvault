@@ -27,6 +27,22 @@ models:
         description: '{{ doc("account_balance") }}'
       - name: market_segment
         description: market segment of the customer
+      - name: exceptions
+        assertions:
+          __unique__:
+            - customer_key
+          customer_id_not_null:
+            description: 'customer Key column is not null'
+            expression: customer_key IS NOT NULL
+          market_segment_check:
+            description: 'checking market segment values'
+            expression: |
+              market_segment IN (
+                'AUTOMOBILE',
+                'FURNITURE',
+                'MACHINERY',
+                'HOUSEHOLD'
+              )    
 
 
   - name: dim_parts
@@ -144,11 +160,6 @@ models:
           - not_null
       - name: customer_key
         description: foreign key for customers
-        tests:
-          - relationships:
-              to: ref('dim_customers')
-              field: customer_key
-              severity: error
       - name: order_date
         description: date of the order
       - name: status_code

@@ -1,5 +1,5 @@
 {% set actual_model_yaml = codegen.generate_model_yaml(
-    model_name='data__a_relation'
+    model_names=['data__a_relation']
   )
 %}
 
@@ -11,9 +11,11 @@ models:
     description: ""
     columns:
       - name: col_a
+        data_type: {{ integer_type_value() }}
         description: ""
 
       - name: col_b
+        data_type: {{ text_type_value() }}
         description: ""
 
 {% endset %}
