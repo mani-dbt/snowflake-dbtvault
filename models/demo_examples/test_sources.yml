@@ -1,0 +1,12 @@
+sources:
+  - name: tpch
+    description: test sources for snapshot functionality
+    database: analytics
+    schema: dbt_mpachineelam_vault
+    tables:
+      - name: mat_history_table
+        description: history table of dim_accounts from matillion
+
+      - name: dim_acct_src
+        description: dim_account regular source table
+        
