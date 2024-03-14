@@ -17,7 +17,8 @@
 {{
     config(
         materialized='table',
-        alias='dim_account_scd_snapshot__'
+        alias='dim_account_scd_snapshot__',
+        post_hook=["DROP TABLE IF EXISTS dim_account_scd_snapshot", "ALTER TABLE IF EXISTS dim_account_scd_snapshot__ RENAME TO dim_account_scd_snapshot", "DROP TABLE IF EXISTS dim_account_scd_snapshot__"]
     )
 }}
 

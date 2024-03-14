@@ -5,7 +5,7 @@
 
         {{ default_schema }}
 
-    {%- elif target.name in ['prod','ci'] -%} 
+    {%- elif target.name in ['prod','qa'] -%} 
 
         {{ custom_schema_name | trim }}
 
