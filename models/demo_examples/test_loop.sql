@@ -1,5 +1,8 @@
 {% for i in range(3) %}
     
-    select * from {{ ref('inserttime') }}
+    {{ per_day_execution(i) }}
 
 {% endfor %}
+
+select 1 as id
+

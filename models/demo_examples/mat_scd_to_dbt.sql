@@ -9,12 +9,15 @@
 -- Gotchas: 
 -- Rename the alias in the model, so it doesn't conflict with the actual Snapshot code.
 
+-- pre-loading one-time setup related:
+     
+-- Actual execution: 
 
 
 {{
     config(
         materialized='table',
-        alias='dim_account_scd_snapshot___'
+        alias='dim_account_scd_snapshot__'
     )
 }}
 
